@@ -1,6 +1,9 @@
 var express = require('express');
+const bcrypt = require('bcrypt');
 var User = require('../../models/users');
 var router = express.Router();
+
+
 
 router.post('/', function(req, res, next) {
     if (!req.body.user) {
@@ -9,21 +12,30 @@ router.post('/', function(req, res, next) {
             error: 'User must be sent in request'
         });
     }
-    User.create({
-        userName: req.body.user.userName,
-        email: req.body.user.email,
-        password: req.body.user.password,
-    }, function(err, user) {
-        if(err) {
-            res.status(400).json({
-                success: false,
-                error: 'Could not create user'
-            });
-        }
-        res.status(200).json({
-            success: true,
-            data: user
+
+   bcrypt.hash(req.body.user.password, 10, function(err, hash) {
+      if (err) {
+        res.status(400).json({
+          success: false,
+          error: 'Something went wrong'
         });
+      }
+      User.create({
+          userName: req.body.user.userName,
+          email: req.body.user.email,
+          password: hash,
+      }, function(err, user) {
+          if(err) {
+              res.status(400).json({
+                  success: false,
+                  error: 'Could not create user'
+              });
+          }
+          res.status(200).json({
+              success: true,
+              data: user
+          });
+      });
     });
 });
 
