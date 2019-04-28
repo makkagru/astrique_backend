@@ -39,20 +39,6 @@ router.post('/', function(req, res, next) {
     });
 });
 
-router.delete('/', function(req, res, next) {
-    User.remove({userName: req.body.user.userName}, function(err) {
-        if (err) {
-            res.status(400).json({
-                success: false,
-                error: 'Could not delete account'
-            });
-        }
-        res.status(200).json({
-            sucess: true
-        });
-    });
-});
-
 router.put('/', function(req, res, next) {
     User.findOne({userName: req.body.user.userName}, function(err, user) {
         if (err) {

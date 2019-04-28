@@ -1,5 +1,6 @@
 var express = require('express');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 var User = require('../../models/users'); 
 
 var router = express.Router();
@@ -9,7 +10,7 @@ router.post('/', function(req, res, next) {
         if (err) {
             return res.status(400).json({
                 success: false,
-                error: 'Something went wrong',
+                error: 'Something went wrong'
             });
         }
 
@@ -27,11 +28,20 @@ router.post('/', function(req, res, next) {
               success: false
             })
           }
-          res.status(200).json({
-            success: true
+          jwt.sign({user}, 'cHrgAh4565$58|@56!aAhjAbnbWrT454Hw3rr55f4aG#%()4a1g5Ha', {expiresIn: '1h'}, function(err, token) {
+            if (err) {
+              return res.status(400).json({
+                success: false,
+                error: 'Something went wrongy'
+              });
+            }
+            res.status(200).json({
+              success: true,
+              token
+            });
           });
-        });
     });
+  });
 });
 
-module.exports = router;
+module.exports = router; 
