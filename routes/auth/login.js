@@ -32,7 +32,7 @@ router.post('/', function(req, res, next) {
             if (err) {
               return res.status(400).json({
                 success: false,
-                error: 'Something went wrongy'
+                error: 'Something went wrong'
               });
             }
             res.status(200).json({

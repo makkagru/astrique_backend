@@ -2,6 +2,7 @@ var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
+var jwt = require('jsonwebtoken');
 var logger = require('morgan');
 var mongoose = require('mongoose');
 
@@ -32,6 +33,29 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use(function(req, res, next) {
+  if (req.method !== "GET") {
+    if (!req.headers.authorization) {
+      return res.status(400).json({
+        success: false,
+        error: 'Something goes wrong'
+      });
+    }
+    const token = req.headers.authorization.split('Bearer ');
+    jwt.verify(token[1], 'cHrgAh4565$58|@56!aAhjAbnbWrT454Hw3rr55f4aG#%()4a1g5Ha', function(err) {
+      if(err) {
+        return res.status(403).json({
+          success: false,
+          error: "You don't have access"
+        });
+      }
+      return next();
+    });
+  } else {
+    next();
+  }
+});
 
 app.use('/', indexRouter);
 app.use('/api/users', usersRouter);
