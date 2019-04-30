@@ -52,8 +52,8 @@ router.put('/', function(req, res, next) {
             user.userName = req.body.user.userName;
         }
 
-        if(req.body.user.Email) {
-            user.Email = req.body.user.Email;
+        if(req.body.user.email) {
+            user.email = req.body.user.email;
         }
 
         if(req.body.user.password) {

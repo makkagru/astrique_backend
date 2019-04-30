@@ -32,9 +32,9 @@ router.post('/', function(req, res, next) {
 
       Listings.create({
         name: req.body.listing.name,
-        authorId: author.id,
         photo: req.body.listing.photo,
-        collectionId: collection.id
+        author,
+        collection
       }, function (err, listing) {
           if (err) {
             return res.status(400).json({
@@ -52,22 +52,23 @@ router.post('/', function(req, res, next) {
 });
 
 router.get('/', function(req, res, next) {
-  Listings.find({}, function(err, listing) {
+  Listings.find({}, function(err, listings) {
     if (err) {
       return res.status(400).json({
         success: false,
         error: 'Could not get Listing'
       });
     }
+
     return res.status(200).json({
-      data: listing,
+      data: listings,
       success: true
     });
   });
 });
 
 router.delete('/', function(req, res , next) {
-  Listings.remove({id: req.body.listing.id}, function(err) {
+  Listings.remove({id: req.body.listings.id}, function(err) {
     if (err) {
       return res.status(400).json({
         sucess: false,

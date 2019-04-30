@@ -28,7 +28,7 @@ router.post('/', function(req, res, next) {
               success: false
             })
           }
-          jwt.sign({user}, 'cHrgAh4565$58|@56!aAhjAbnbWrT454Hw3rr55f4aG#%()4a1g5Ha', {expiresIn: '1h'}, function(err, token) {
+          jwt.sign({user}, 'cHrgAh4565$58|@56!aAhjAbnbWrT454Hw3rr55f4aG#%()4a1g5Ha', {expiresIn: '300d'}, function(err, token) {
             if (err) {
               return res.status(400).json({
                 success: false,

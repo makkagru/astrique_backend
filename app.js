@@ -35,7 +35,13 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(function(req, res, next) {
-  if (req.method !== "GET") {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+  next();
+});
+
+app.use(function(req, res, next) {
+  if (req.method !== 'GET' && req.method !== 'OPTIONS') {
     if (!req.headers.authorization) {
       return res.status(400).json({
         success: false,
@@ -63,7 +69,7 @@ app.use('/api/authors', authorsRouter);
 app.use('/api/listings', listingsRouter);
 app.use('/api/collections', collectionsRouter);
 app.use('/api/register', registerRouter);
-app.use('/api/login', loginRouter);
+app.use('/api/auth/login', loginRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
