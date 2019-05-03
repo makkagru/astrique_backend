@@ -52,11 +52,11 @@ router.put('/', function(req, res, next) {
             user.userName = req.body.user.userName;
         }
 
-        if(req.body.user.email) {
+        if (req.body.user.email) {
             user.email = req.body.user.email;
         }
 
-        if(req.body.user.password) {
+        if (req.body.user.password) {
             user.password = req.body.user.password;
         }
 

@@ -7,6 +7,7 @@ var router = express.Router();
 
 router.post('/', function(req, res, next) {
     User.findOne({userName: req.body.user.userName}, function(err, user) {
+      console.log(user);
         if (err) {
             return res.status(400).json({
                 success: false,

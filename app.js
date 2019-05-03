@@ -13,6 +13,7 @@ var listingsRouter = require('./routes/listings');
 var collectionsRouter = require('./routes/collections');
 var registerRouter = require('./routes/auth/register');
 var loginRouter = require('./routes/auth/login');
+var mediaRouter = require('./routes/media');
 
 var app = express();
 
@@ -23,6 +24,8 @@ db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
   console.log('connected');
 });
+
+const exceptionUrls = ['/api/auth/login', '/api/auth/register'];
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -41,7 +44,8 @@ app.use(function(req, res, next) {
 });
 
 app.use(function(req, res, next) {
-  if (req.method !== 'GET' && req.method !== 'OPTIONS') {
+  req.rootPath = __dirname;
+  if (req.method !== 'GET' && req.method !== 'OPTIONS' && exceptionUrls.indexOf(req.url) === -1) {
     if (!req.headers.authorization) {
       return res.status(400).json({
         success: false,
@@ -66,10 +70,11 @@ app.use(function(req, res, next) {
 app.use('/', indexRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/authors', authorsRouter);
+app.use('/api/auth/register', registerRouter);
+app.use('/api/auth/login', loginRouter);
 app.use('/api/listings', listingsRouter);
 app.use('/api/collections', collectionsRouter);
-app.use('/api/register', registerRouter);
-app.use('/api/auth/login', loginRouter);
+app.use('/api/media', mediaRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
