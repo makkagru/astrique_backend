@@ -36,9 +36,6 @@ router.post('/upload', upload.single('image'), function(req, res, next) {
 });
 
 router.get('/:objectId', function(req, res, next) {
-	//Find model with objectId
-	//Res send the file
-	//If no file 404 not found
 	Media.findOne({id: req.params.objectId}, function(err, media) {
 		if (err) {
 			return res.status(400).json({
@@ -50,6 +47,7 @@ router.get('/:objectId', function(req, res, next) {
 				error: "not found"
 			});
 		}
+		console.log(media);
 		res.sendFile(media.path);
 	});
 });

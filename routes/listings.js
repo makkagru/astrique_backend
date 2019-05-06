@@ -52,7 +52,18 @@ router.post('/', function(req, res, next) {
 });
 
 router.get('/', function(req, res, next) {
-  Listings.find({}, function(err, listings) {
+  const searchObj = {};
+  if (req.query.collectionId) {
+    searchObj.collection = {
+      id: req.query.collectionId,
+    };
+  }
+  if (req.query.authorId) {
+    searchObj.author = {
+      id: req.query.authorId,
+    };
+  }
+  Listings.find(searchObj, function(err, listings) {
     if (err) {
       return res.status(400).json({
         success: false,
