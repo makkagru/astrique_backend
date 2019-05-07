@@ -14,12 +14,12 @@ router.post('/', function(req, res, next) {
       message: 'Listing must be sent in request body'
     });
   }
-  Collection.findOne({id: req.body.listing.collectionId}, function(collectionErr, collection) {
+  Collection.findOne({id: req.body.listing.collectionId}, function(collectionErr, col) {
     Author.findOne({id: req.body.listing.authorId}, function(authorErr, author) {
-      if (collectionErr || !collection) {
+      if (collectionErr || !col) {
         return res.status(400).json({
           success: false,
-          error: 'Could not find listing'
+          error: 'Could not find collection'
         });
       }
 
@@ -34,7 +34,7 @@ router.post('/', function(req, res, next) {
         name: req.body.listing.name,
         photo: req.body.listing.photo,
         author,
-        collection
+        col
       }, function (err, listing) {
           if (err) {
             return res.status(400).json({

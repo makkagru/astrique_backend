@@ -8,9 +8,9 @@ var ListingSchema = new mongoose.Schema({
         default: shortId.generate()
     },
     name: String,
-    authorId: String,
+    author: Object,
     photo: String,
-    collectionId: String
+    col: Object
 });
 
 var ListingModel = mongoose.model('ListingModel', ListingSchema);
