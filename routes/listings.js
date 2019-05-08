@@ -78,8 +78,8 @@ router.get('/', function(req, res, next) {
   });
 });
 
-router.delete('/', function(req, res , next) {
-  Listings.remove({id: req.body.listings.id}, function(err) {
+router.delete('/:listingId', function(req, res , next) {
+  Listings.remove({id: req.params.listingId}, function(err) {
     if (err) {
       return res.status(400).json({
         sucess: false,
@@ -92,9 +92,36 @@ router.delete('/', function(req, res , next) {
   });
 });
 
+router.patch('/:listingId', function(req, res, next) {
+  Collection.findOne({id: req.params.listingId}, function(findErr, collection) {
+   if (findErr || !collection) {
+    return res.status(404).json({
+      success: false,
+      error: 'Could not find listing'
+    });
+   }
+
+   if (req.body.collection) {
+    collection = req.body.collection;
+   }
+   collection.save(function(err) {
+    if (err) {
+      return res.status(400).json({
+        success: false,
+        error: 'Something goes wrong'
+      });
+    }
+     res.status(204).json({
+       data: collection,
+       success: true
+     });
+   });
+  });
+});
+
 router.put('/', function(req, res, next) {
   Listings.findOne({id: req.body.listing.id}, function(err, listing) {
-    if (err) {
+    if (err || !listing) {
       return res.status(400).json({
         success: false,
         error: 'Could not edit Listing'
@@ -131,6 +158,4 @@ router.put('/', function(req, res, next) {
     });
   });
 });
-
-
 module.exports = router;
