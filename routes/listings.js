@@ -14,8 +14,8 @@ router.post('/', function(req, res, next) {
       message: 'Listing must be sent in request body'
     });
   }
-  Collection.findOne({id: req.body.listing.collectionId}, function(collectionErr, col) {
-    Author.findOne({id: req.body.listing.authorId}, function(authorErr, author) {
+  Collection.findOne({id: req.body.listing.collection.id}, function(collectionErr, col) {
+    Author.findOne({id: req.body.listing.author.id}, function(authorErr, author) {
       if (collectionErr || !col) {
         return res.status(400).json({
           success: false,
@@ -53,12 +53,12 @@ router.post('/', function(req, res, next) {
 
 router.get('/', function(req, res, next) {
   const searchObj = {};
-  if (req.query.collectionId) {
+  if (req.query.collection) {
     searchObj.collection = {
       id: req.query.collectionId,
     };
   }
-  if (req.query.authorId) {
+  if (req.query.author) {
     searchObj.author = {
       id: req.query.authorId,
     };
