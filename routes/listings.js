@@ -64,6 +64,7 @@ router.get('/', function(req, res, next) {
     };
   }
   Listings.find(searchObj, function(err, listings) {
+    console.log(listings);
     if (err) {
       return res.status(400).json({
         success: false,
@@ -93,27 +94,33 @@ router.delete('/:listingId', function(req, res , next) {
 });
 
 router.patch('/:listingId', function(req, res, next) {
-  Collection.findOne({id: req.params.listingId}, function(findErr, collection) {
-   if (findErr || !collection) {
+  Listings.findOne({id: req.params.listingId}, function(listingErr, listing) {
+   if (listingErr || !listing) {
     return res.status(404).json({
       success: false,
-      error: 'Could not find listing'
+      error: 'Could not find Listing'
     });
    }
-
-   if (req.body.collection) {
-    collection = req.body.collection;
-   }
-   collection.save(function(err) {
-    if (err) {
+   Collection.findOne({id: req.body.collection.id}, function(colErr, collection) {
+    if(!collection || colErr) {
       return res.status(400).json({
         success: false,
-        error: 'Something goes wrong'
+        error: 'collection must be sent in request'
       });
     }
-     res.status(204).json({
-       data: collection,
-       success: true
+    listing.col = collection;
+   
+    listing.save(function(err, addedListing) {
+      if (err) {
+        return res.status(400).json({
+          success: false,
+          error: 'Something goes wrong'
+        });
+      }
+       res.status(200).json({
+         data: addedListing,
+         success: true
+       });
      });
    });
   });
