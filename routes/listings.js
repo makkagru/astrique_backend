@@ -126,8 +126,8 @@ router.patch('/:listingId', function(req, res, next) {
   });
 });
 
-router.put('/', function(req, res, next) {
-  Listings.findOne({id: req.body.listing.id}, function(err, listing) {
+router.put('/:listingId', function(req, res, next) {
+  Listings.findOne({id: req.params.listingId}, function(err, listing) {
     if (err || !listing) {
       return res.status(400).json({
         success: false,
@@ -139,8 +139,8 @@ router.put('/', function(req, res, next) {
       listing.name = req.body.listing.name;
     }
 
-    if (req.body.listing.authorId) {
-      listing.authorId = req.body.listing.authorId
+    if (req.body.listing.authorName) {
+      listing.author.name = req.body.listing.authorName;
     }
 
     if (req.body.listing.photo) {
