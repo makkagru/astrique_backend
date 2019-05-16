@@ -53,18 +53,13 @@ router.post('/', function(req, res, next) {
 
 router.get('/', function(req, res, next) {
   const searchObj = {};
-  if (req.query.collection) {
-    searchObj.collection = {
-      id: req.query.collectionId,
-    };
+  if (req.query.collectionId) {
+    searchObj['col.id'] = req.query.collectionId;
   }
-  if (req.query.author) {
-    searchObj.author = {
-      id: req.query.authorId,
-    };
+  if (req.query.authorId) {
+    searchObj['author.id'] = req.query.authorId;
   }
   Listings.find(searchObj, function(err, listings) {
-    console.log(listings);
     if (err) {
       return res.status(400).json({
         success: false,

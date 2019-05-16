@@ -2,6 +2,8 @@ var express = require('express');
 var multer = require('multer');
 var router = express.Router();
 var path = require('path');
+var sharp = require('sharp');
+var fs = require('fs');
 var Media = require('../models/media');
 var appDir = path.dirname(require.main.filename);
 
@@ -28,10 +30,27 @@ router.post('/upload', upload.single('image'), function(req, res, next) {
 				error: 'Could not create media'
 			});
 		}
-		res.status(200).json({
-			success: true,
-			data: media
-		});
+		sharp(path)
+		    .resize({height: 'auto', width: '200px'})
+		    .toFile(path)
+		    .toBuffer()
+		    .then(function(err, data ) {
+		    	if (err) {
+		    		return res.status(400).json({
+		    			success: false,
+		    			error: 'error with sharp'
+		    		});
+		    	}
+		    	res.status(200).json({
+		    		success: true,
+		    		data
+		    	})
+		    }
+		    })
+		    .catch( err => {
+		        console.log(err);
+		    });			
+		
 	});
 });
 
@@ -47,7 +66,6 @@ router.get('/:objectId', function(req, res, next) {
 				error: "not found"
 			});
 		}
-		console.log(media);
 		res.sendFile(media.path);
 	});
 });
