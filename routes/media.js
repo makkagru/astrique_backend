@@ -104,8 +104,9 @@ router.get('/:objectId', function(req, res, next) {
                 });
               }
             }
-
-        // res.sendFile(media.path);
+        if (!req.query.width && !req.query.height) {
+          res.sendFile(media.path);
+        }
     });
 });
 
