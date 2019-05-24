@@ -10,7 +10,8 @@ var ListingSchema = new mongoose.Schema({
     name: String,
     author: Object,
     photo: String,
-    col: Object
+    col: Object,
+    value: Number
 });
 
 var ListingModel = mongoose.model('ListingModel', ListingSchema);

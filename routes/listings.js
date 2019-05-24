@@ -33,6 +33,7 @@ router.post('/', function(req, res, next) {
       Listings.create({
         name: req.body.listing.name,
         photo: req.body.listing.photo,
+        value: req.body.listing.value,
         author,
         col
       }, function (err, listing) {
